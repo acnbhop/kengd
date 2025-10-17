@@ -11,5 +11,41 @@ config_version=5
 [application]
 
 config/name="Ken"
+config/version="1.0"
 config/features=PackedStringArray("4.5", "Forward Plus")
+boot_splash/bg_color=Color(0.22670761, 0.22670746, 0.22670743, 1)
+boot_splash/show_image=false
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[layer_names]
+
+3d_render/layer_1="Actors"
+3d_render/layer_2="Art Background"
+3d_render/layer_3="Art Foreground"
+3d_render/layer_4="FX Systems"
+3d_physics/layer_1="Primary Objects"
+3d_navigation/layer_1="Primary"
+3d_physics/layer_2="Secondary Objects"
+3d_physics/layer_3="Not Important Objects"
+avoidance/layer_1="Cliff"
+avoidance/layer_2="Lava"
+avoidance/layer_3="Acid"
+avoidance/layer_4="Scary"
+
+[physics]
+
+common/physics_ticks_per_second=120
+common/max_physics_steps_per_frame=15
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=2
+environment/defaults/default_clear_color=Color(0.3779188, 0.3779189, 0.37791875, 1)
