@@ -7,10 +7,22 @@ extends CharacterBody3D
 @export_range(0.0, 20.0, 0.1) var MovementSpeed: float = 5.0
 # The force applied when the character jumps.
 @export_range(0.0, 20.0, 0.1) var JumpForce: float = 4.0
+# Movement speed when crouching
+@export_range(0.0, 20.0, 0.1) var CrouchSpeed: float = 2.5
 
 @export_group("Camera")
 # The sensitivity of the mouse for looking around.
 @export_range(0.001, 0.01, 0.0001) var MouseSensitivity: float = 0.002
+
+@export_group("Crouching")
+# Vertical position of head node when crouching.
+@export var CrouchDepth: float = -0.5
+# How quickly the transition happens.
+@export var CrouchTransitionSpeed: float = 10.0
+# Height of collision shape when standing.
+@export var StandingHeight: float = 2.0
+# Height of collision shape when crouching.
+@export var CrouchingHeight: float = 1.2
 
 # Reference to the head node for camera rotation.
 @onready var HeadNode: Node3D = $Head
