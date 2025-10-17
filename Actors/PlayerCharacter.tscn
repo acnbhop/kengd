@@ -1,3 +1,15 @@
-[gd_scene format=3 uid="uid://745svc1p0ok0"]
+[gd_scene load_steps=2 format=3 uid="uid://745svc1p0ok0"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_de7ih"]
 
 [node name="PlayerCharacter" type="Node3D"]
+
+[node name="Character" type="CharacterBody3D" parent="."]
+
+[node name="Head" type="Node3D" parent="Character"]
+
+[node name="Camera" type="Camera3D" parent="Character/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="CharacterCollision" type="CollisionShape3D" parent="Character"]
+shape = SubResource("CapsuleShape3D_de7ih")
