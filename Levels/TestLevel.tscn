@@ -2,12 +2,21 @@
 
 [ext_resource type="PackedScene" uid="uid://745svc1p0ok0" path="res://Actors/PlayerCharacter.tscn" id="1_uib4f"]
 
-[node name="Node3D" type="Node3D"]
+[node name="TestLevel" type="Node3D"]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="PlayerCharacter" parent="Actors" instance=ExtResource("1_uib4f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0717754, 1.6820133, -1.9470849)
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.492676, 0, -5.539795)
 use_collision = true
 size = Vector3(9.985352, 1, 12.07959)
 
-[node name="PlayerCharacter" parent="." instance=ExtResource("1_uib4f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0717754, 1.6820133, -1.9470849)
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.563351, 3.0129066, -8.702328)
