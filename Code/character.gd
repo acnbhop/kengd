@@ -6,12 +6,12 @@ extends CharacterBody3D
 @export_group("Movement")
 ## Movement speed of the character.
 @export_range(0.0, 20.0, 0.1) var f_movement_speed: float = 5.0
-## The force applied when the character jumps.
-@export_range(0.0, 20.0, 0.1) var f_jump_force: float = 4.0
 ## Movement speed when sprinting.
 @export_range(0.0, 20.0, 0.1) var f_sprint_speed: float = 10.0
 ## Movement speed when crouching
 @export_range(0.0, 20.0, 0.1) var f_crouch_speed: float = 2.5
+## The force applied when the character jumps.
+@export_range(0.0, 20.0, 0.1) var f_jump_force: float = 4.0
 
 ## This group controls the camera settings.
 @export_group("Camera")
