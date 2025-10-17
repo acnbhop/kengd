@@ -2,8 +2,14 @@
 
 extends CharacterBody3D
 
+@export_group("Movement")
+# Movement speed of the character.
 @export var MovementSpeed: float = 5.0
-@export var JumpForce: float = 7.0
+# The force applied when the character jumps.
+@export var JumpForce: float = 4.0
+
+@export_group("Camera")
+# The sensitivity of the mouse for looking around.
 @export var MouseSensitivity: float = 0.002
 
 @onready var HeadNode: Node3D = $Head
