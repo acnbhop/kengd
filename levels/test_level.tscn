@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://745svc1p0ok0" path="res://actors/player_character.tscn" id="1_uib4f"]
 
-[node name="TestLevel" type="Node3D"]
+[node name="testlevel" type="Node3D"]
 
 [node name="actors" type="Node3D" parent="."]
 
