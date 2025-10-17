@@ -26,6 +26,10 @@ extends CharacterBody3D
 ## 0 = no roll
 ## 1 = full roll
 @export_range(0.0, 1.0, 0.01) var f_crouch_roll_multiplier: float = 0.5
+## How much to increase fov when sprinting
+@export_range(0.0, 20.0, 0.1) var f_sprint_fov_increase: float = 10.0
+## How quickly the fov change happens.
+@export_range(0.0, 20.0, 0.1) var f_fov_transition_speed: float = 8.0
 
 ## This group controls crouching settings.
 @export_group("Crouching")
