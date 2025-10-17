@@ -5,7 +5,7 @@
 # Author: 	Grant Abernathy & Kendalynn Kohler
 # Date:		October 17th, 2025
 #
-# Purpose: Main character controller script.
+# Purpose: 	Main character controller script.
 #==================================================================================================
 
 extends CharacterBody3D
