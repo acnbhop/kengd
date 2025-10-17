@@ -43,15 +43,6 @@ extends CharacterBody3D
 ## How quickly the fov change happens.
 @export_range(0.0, 20.0, 0.1) var f_fov_transition_speed: float = 8.0
 
-## This group controls jumping and landing
-@export_group("Jump & Land FX")
-## How much the FOV increases while in the air.
-@export_range(0.0, 20.0, 0.1) var f_jump_fov_boost: float = 5.0
-## How much the FOV dips upon landing.
-@export_range(-20.0, 0.0, 0.1) var f_land_fov_dip: float = -7.0
-## How quickly the jump and land FOV effects happen.
-@export_range(0.0, 20.0, 0.1) var f_jump_land_fov_speed: float = 12.0
-
 ## This group controls crouching settings.
 @export_group("Crouching")
 ## Vertical position of head node when crouching.
