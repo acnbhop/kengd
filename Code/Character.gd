@@ -75,7 +75,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # Process physics / movement and everything.
 func _physics_process(delta: float) -> void:
-    ## CurrentVelocity - Variable to hold the current velocity during calculations.
+	## CurrentVelocity - Variable to hold the current velocity during calculations.
 	var CurrentVelocity: Vector3 = velocity
 
 	# Apply gravity
@@ -103,11 +103,11 @@ func _physics_process(delta: float) -> void:
 
 	# Determine target heights and speed based on the crouch state
 
-    ## TargetHeadY - Vertical position of the head node.
+	## TargetHeadY - Vertical position of the head node.
 	var TargetHeadY: float = CrouchDepth if IsCrouching else 0.0
-    ## TargetCollisionHeight - Height of the collision shape.
+	## TargetCollisionHeight - Height of the collision shape.
 	var TargetCollisionHeight: float = CrouchingHeight if IsCrouching else StandingHeight
-    ## CurrentSpeed - Movement speed based on crouch state.
+	## CurrentSpeed - Movement speed based on crouch state.
 	var CurrentSpeed: float = CrouchSpeed if IsCrouching else MovementSpeed
 
 	# Smoothly interpolate head position
@@ -115,12 +115,12 @@ func _physics_process(delta: float) -> void:
 	CollisionShapeNode.shape.height = lerp(CollisionShapeNode.shape.height, TargetCollisionHeight, delta * CrouchTransitionSpeed)
 
 	# Handle movement input 
-    # We get a 2D vector from input actions and convert it to a 3D movement direction.
-    # which is the MovementDirection variable respectively.
+	# We get a 2D vector from input actions and convert it to a 3D movement direction.
+	# which is the MovementDirection variable respectively.
 
-    ## InputDirection - 2D vector representing input direction.
+	## InputDirection - 2D vector representing input direction.
 	var InputDirection: Vector2 = Input.get_vector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward")
-    ## MovementDirection - 3D vector representing movement direction.
+	## MovementDirection - 3D vector representing movement direction.
 	var MovementDirection: Vector3 = (transform.basis * Vector3(InputDirection.x, 0, InputDirection.y)).normalized()
 
 	# Handle horizontal movement
