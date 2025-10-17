@@ -173,8 +173,11 @@ func apply_gravity(p_velocity: Vector3, delta: float) -> Vector3:
 
 ## Handles the jump action.
 func handle_jump(p_velocity: Vector3) -> Vector3:
-	if Input.is_action_just_pressed("jump") and is_on_floor() and not b_is_crouching:
-		p_velocity.y = f_jump_force
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		if b_is_crouching:
+			p_velocity.y = f_crouch_jump_force
+		else:
+			p_velocity.y = f_jump_force
 	return p_velocity
 	
 ## Handles horizontal character movement.
