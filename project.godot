@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Ken"
+config/name="ken"
 config/version="1.0"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/bg_color=Color(0.22670761, 0.22670746, 0.22670743, 1)
