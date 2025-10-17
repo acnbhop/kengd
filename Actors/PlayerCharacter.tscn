@@ -1,10 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://745svc1p0ok0"]
+[gd_scene load_steps=3 format=3 uid="uid://745svc1p0ok0"]
+
+[ext_resource type="Script" uid="uid://b7i58w667phwx" path="res://Code/Character.gd" id="1_wuvno"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_de7ih"]
 
 [node name="PlayerCharacter" type="Node3D"]
 
 [node name="Character" type="CharacterBody3D" parent="."]
+script = ExtResource("1_wuvno")
 
 [node name="Head" type="Node3D" parent="Character"]
 
