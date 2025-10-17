@@ -22,6 +22,8 @@ extends CharacterBody3D
 @export_range(0.0, 20.0, 0.1) var f_jump_force: float = 4.0
 ## The force applied when the character crouch jumps.
 @export_range(0.0, 20.0, 0.1) var f_crouch_jump_force: float = 2.3
+## Weight of the player.
+@export_range(0.1, 5.0, 0.1) var f_player_weight: float = 1.3
 
 ## This group controls the camera settings.
 @export_group("Camera")
@@ -168,7 +170,7 @@ func get_current_speed() -> float:
 ## Applies gravity to the character.
 func apply_gravity(p_velocity: Vector3, delta: float) -> Vector3:
 	if not is_on_floor():
-		p_velocity.y -= f_gravity * delta
+		p_velocity.y -= (f_gravity * f_player_weight) * delta
 	return p_velocity
 
 ## Handles the jump action.
