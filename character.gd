@@ -47,7 +47,7 @@ extends CharacterBody3D
 ## Reference to the camera node.
 @onready var node_camera: Camera3D = $head/camera
 ## Reference to the collision shape node.
-@onready var node_collision_shape: CollisionShape3D = $character/collision
+@onready var node_collision_shape: CollisionShape3D = $collision
 
 # References to ceiling raycasts for crouch checks.
 
@@ -89,11 +89,11 @@ func _physics_process(delta: float) -> void:
 		v3_current_velocity.y -= f_gravity * delta
 
 	# Handle jumping
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		v3_current_velocity.y = f_jump_force
 
 	## b_wants_to_crouch - Boolean indicating if the player wants to crouch.
-	var b_wants_to_crouch: bool = Input.is_action_pressed("Duck")
+	var b_wants_to_crouch: bool = Input.is_action_pressed("duck")
 
 	# Boolean to check if any of the ceiling raycasts are colliding.
 	var IsCeilingAbove: bool = (node_ceiling_check_1 and node_ceiling_check_1.is_colliding()) or \
@@ -127,7 +127,7 @@ func _physics_process(delta: float) -> void:
 	# which is the v3_movement_direction variable respectively.
 
 	## v2_input_dir - 2D vector representing input direction.
-	var v2_input_dir: Vector2 = Input.get_vector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward")
+	var v2_input_dir: Vector2 = Input.get_vector("strafe_left", "strafe_right", "move_forward", "move_backward")
 
 	## v3_movement_direction - 3D vector representing movement direction.
 	var v3_movement_direction: Vector3 = (transform.basis * Vector3(v2_input_dir.x, 0, v2_input_dir.y)).normalized()
