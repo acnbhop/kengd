@@ -123,6 +123,12 @@ func _physics_process(delta: float) -> void:
 	## MovementDirection - 3D vector representing movement direction.
 	var MovementDirection: Vector3 = (transform.basis * Vector3(InputDirection.x, 0, InputDirection.y)).normalized()
 
+	# Handle the camera roll.
+
+	## TargetRoll - Target roll angle based on strafing input.
+	var TargetRoll: float = -InputDirection.x * deg_to_rad(CameraRollAmount)
+	CameraNode.rotation.z = lerp(CameraNode.rotation.z, TargetRoll, delta * CameraRollSpeed)
+
 	# Handle horizontal movement
 	if MovementDirection:
 		CurrentVelocity.x = MovementDirection.x * CurrentSpeed
