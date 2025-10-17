@@ -127,8 +127,8 @@ func _physics_process(delta: float) -> void:
 	## b_wants_to_crouch - Boolean indicating if the player wants to crouch.
 	var b_wants_to_crouch: bool = Input.is_action_pressed("duck")
 
-	# Handle sprinting state
-	b_is_sprinting = b_wants_to_sprint and not b_wants_to_crouch and v2_input_dir.y < 0
+	# Handle sprinting state - Allow sprinting forward and sideways, but not backward.
+	b_is_sprinting = b_wants_to_sprint and not b_wants_to_crouch and v2_input_dir.y <= 0 and v2_input_dir != Vector2.ZERO
 	
 	# Handle crouching state
 	# Prevent standing up if there's a ceiling above
@@ -180,7 +180,7 @@ func _physics_process(delta: float) -> void:
 	node_head.position.y = lerp(node_head.position.y, f_target_head_y, delta * f_crouch_transition_speed)
 	if node_collision_shape and node_collision_shape.shape:
 		node_collision_shape.shape.height = lerp(node_collision_shape.shape.height, f_target_collision_height, delta * f_crouch_transition_speed)
-
+	
 	#==================================================================================================
 	# 03. Final steps
 	#==================================================================================================
