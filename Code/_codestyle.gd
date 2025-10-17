@@ -23,5 +23,4 @@ extends Node
 # Use v3_ at the start of Vector3 variable names
 # Use q_ at the start of Quaternion variable names
 # Use node_ at the start of Node references
-# Use func_ at the start of function names
 #
