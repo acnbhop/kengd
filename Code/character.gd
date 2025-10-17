@@ -91,18 +91,24 @@ func _ready() -> void:
 	f_default_fov = node_camera.fov
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Handle mouse cursor locking/unlocking.
 	if event.is_action_pressed("pause"):
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-	if event is InputEventMouseMotion:
+	# Only process mouse look if the cursor is captured.
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * f_mouse_sensitivity)
 		node_head.rotate_x(-event.relative.y * f_mouse_sensitivity)
 		node_head.rotation.x = clamp(node_head.rotation.x, deg_to_rad(-90.0), deg_to_rad(90.0))
 
 func _physics_process(delta: float) -> void:
+	# Don't process if cursor isn't captured.
+	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+		return
+	
 	# 01. Get Inputs
 	var v2_input_dir: Vector2 = Input.get_vector("strafe_left", "strafe_right", "move_forward", "move_backward")
 	var v3_movement_direction: Vector3 = (transform.basis * Vector3(v2_input_dir.x, 0, v2_input_dir.y)).normalized()
