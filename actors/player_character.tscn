@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://745svc1p0ok0"]
+
+[ext_resource type="Script" uid="uid://b7i58w667phwx" path="res://code/Character.gd" id="1_d5mhq"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_de7ih"]
+
+[node name="player_character" type="Node3D"]
+
+[node name="character" type="CharacterBody3D" parent="."]
+script = ExtResource("1_d5mhq")
+
+[node name="head" type="Node3D" parent="character"]
+
+[node name="camera" type="Camera3D" parent="character/head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="collision" type="CollisionShape3D" parent="character"]
+shape = SubResource("CapsuleShape3D_de7ih")
+
+[node name="ccheck1" type="RayCast3D" parent="character"]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 0.4663958, 0)
+
+[node name="ccheck2" type="RayCast3D" parent="character"]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, -0.5142418, 0.4663958, 0)
+
+[node name="ccheck3" type="RayCast3D" parent="character"]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0.51301265, 0.4663958, 0)
+
+[node name="ccheck4" type="RayCast3D" parent="character"]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 0.4663958, 0.51452106)
+
+[node name="ccheck5" type="RayCast3D" parent="character"]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 0.4663958, -0.5153007)

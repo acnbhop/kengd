@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://dawygssgdcp1t"]
+
+[ext_resource type="PackedScene" uid="uid://745svc1p0ok0" path="res://actors/player_character.tscn" id="1_uib4f"]
+
+[node name="TestLevel" type="Node3D"]
+
+[node name="actors" type="Node3D" parent="."]
+
+[node name="player_character" parent="actors" instance=ExtResource("1_uib4f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2958736, 1.5642414, -2.7937179)
+
+[node name="geometry" type="Node3D" parent="."]
+
+[node name="csg_box_01" type="CSGBox3D" parent="geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.515137, 0, -12.86145)
+use_collision = true
+size = Vector3(24.030273, 1, 26.7229)
+
+[node name="csg_box_02" type="CSGBox3D" parent="geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.264, 2.7475543, -11.07959)
+use_collision = true
+size = Vector3(9.985352, 1, 12.07959)
+
+[node name="lighting" type="Node3D" parent="."]
+
+[node name="omni_light_01" type="OmniLight3D" parent="lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7237954, 3.0987806, -8.702328)
+shadow_enabled = true
