@@ -21,7 +21,7 @@ extends CharacterBody3D
 ## The force applied when the character jumps.
 @export_range(0.0, 20.0, 0.1) var f_jump_force: float = 4.0
 ## The force applied when the character crouch jumps.
-@export_range(0.0, 20.0, 0.1) var f_crouch_jump_force: float = 6.0
+@export_range(0.0, 20.0, 0.1) var f_crouch_jump_force: float = 2.3
 
 ## This group controls the camera settings.
 @export_group("Camera")
