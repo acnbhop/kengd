@@ -82,111 +82,117 @@ var b_is_sprinting: bool = false
 ## Stores the default FOV to return to.
 var f_default_fov: float
 
-# Lock cursor to the center of the screen on ready.
+#==================================================================================================
+# Godot Built-in Functions
+#==================================================================================================
+
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	# Store the initial FOV when the game starts.
 	f_default_fov = node_camera.fov
 
-# Handle mouse movement for looking around.
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		# Rotate character and head based on mouse movement
 		rotate_y(-event.relative.x * f_mouse_sensitivity)
-		# Rotate head based on mouse movement
 		node_head.rotate_x(-event.relative.y * f_mouse_sensitivity)
-		# Clamp head rotation to prevent flipping
 		node_head.rotation.x = clamp(node_head.rotation.x, deg_to_rad(-90.0), deg_to_rad(90.0))
 
-# Process physics / movement and everything.
 func _physics_process(delta: float) -> void:
-
-	#==================================================================================================
-	# 01. Handle Movement Input
-	#==================================================================================================
-	# We get a 2D vector from input actions and convert it to a 3D movement direction.
-	# which is the v3_movement_direction variable respectively.
-	#==================================================================================================
-
-	## v2_input_dir - 2D vector representing input direction.
+	# 01. Get Inputs
 	var v2_input_dir: Vector2 = Input.get_vector("strafe_left", "strafe_right", "move_forward", "move_backward")
-	## v3_movement_direction - 3D vector representing movement direction.
 	var v3_movement_direction: Vector3 = (transform.basis * Vector3(v2_input_dir.x, 0, v2_input_dir.y)).normalized()
-	## v3_current_velocity - Variable to hold the current velocity during calculations.
-	var v3_current_velocity: Vector3 = velocity
+	
+	# 02. Handle Player State (Crouching, Sprinting)
+	handle_state(v2_input_dir)
+	
+	# 03. Handle Movement & Physics
+	var f_current_speed = get_current_speed()
+	var v3_current_velocity = velocity
+	v3_current_velocity = apply_gravity(v3_current_velocity, delta)
+	v3_current_velocity = handle_jump(v3_current_velocity)
+	v3_current_velocity = handle_horizontal_movement(v3_current_velocity, v3_movement_direction, f_current_speed)
+	velocity = v3_current_velocity
+	move_and_slide()
+	
+	# 04. Handle Visuals
+	handle_crouch_visuals(delta)
+	handle_camera_effects(v2_input_dir, delta)
 
-	#==================================================================================================
-	# 02. Handling stuff.
-	#==================================================================================================
-	# This section handles gravity, jumping, crouching, sprinting, camera roll, and
-	# movement speed adjustments based on the player's state.
-	#==================================================================================================
+#==================================================================================================
+# State Handling Functions
+#==================================================================================================
 
-	## b_wants_to_sprint - Boolean indicating if the player wants to sprint.
+## Handles the logic for crouching and sprinting states.
+func handle_state(v2_input_dir: Vector2):
 	var b_wants_to_sprint: bool = Input.is_action_pressed("sprint")
-	## b_wants_to_crouch - Boolean indicating if the player wants to crouch.
 	var b_wants_to_crouch: bool = Input.is_action_pressed("duck")
 
-	# Handle sprinting state - Allow sprinting forward and sideways, but not backward.
-	b_is_sprinting = b_wants_to_sprint and not b_wants_to_crouch and v2_input_dir.y <= 0 and v2_input_dir != Vector2.ZERO
+	# Sprinting state logic
+	b_is_sprinting = b_wants_to_sprint and not b_is_crouching and v2_input_dir.y <= 0 and v2_input_dir != Vector2.ZERO
 	
-	# Handle crouching state
-	# Prevent standing up if there's a ceiling above
-	var IsCeilingAbove: bool = (node_ceiling_check_1 and node_ceiling_check_1.is_colliding()) or \
-							  (node_ceiling_check_2 and node_ceiling_check_2.is_colliding()) or \
-							  (node_ceiling_check_3 and node_ceiling_check_3.is_colliding()) or \
-							  (node_ceiling_check_4 and node_ceiling_check_4.is_colliding())
-	if b_is_crouching and not b_wants_to_crouch and IsCeilingAbove:
+	# Crouching state logic
+	var is_ceiling_above: bool = (node_ceiling_check_1 and node_ceiling_check_1.is_colliding()) or \
+							   (node_ceiling_check_2 and node_ceiling_check_2.is_colliding()) or \
+							   (node_ceiling_check_3 and node_ceiling_check_3.is_colliding()) or \
+							   (node_ceiling_check_4 and node_ceiling_check_4.is_colliding())
+	if b_is_crouching and not b_wants_to_crouch and is_ceiling_above:
 		b_wants_to_crouch = true
 	b_is_crouching = b_wants_to_crouch
 
-	## f_current_speed - Determines the current speed based on sprint/crouch state.
-	var f_current_speed: float
+## Determines the current movement speed based on player state.
+func get_current_speed() -> float:
 	if b_is_sprinting:
-		f_current_speed = f_sprint_speed
+		return f_sprint_speed
 	elif b_is_crouching:
-		f_current_speed = f_crouch_speed
+		return f_crouch_speed
 	else:
-		f_current_speed = f_movement_speed
+		return f_movement_speed
 
-	# Apply gravity
+#==================================================================================================
+# Physics & Movement Functions
+#==================================================================================================
+
+## Applies gravity to the character.
+func apply_gravity(p_velocity: Vector3, delta: float) -> Vector3:
 	if not is_on_floor():
-		v3_current_velocity.y -= f_gravity * delta
+		p_velocity.y -= f_gravity * delta
+	return p_velocity
 
-	# Handle jumping
+## Handles the jump action.
+func handle_jump(p_velocity: Vector3) -> Vector3:
 	if Input.is_action_just_pressed("jump") and is_on_floor() and not b_is_crouching:
-		v3_current_velocity.y = f_jump_force
+		p_velocity.y = f_jump_force
+	return p_velocity
 	
-	# Handle horizontal movement
-	if v3_movement_direction:
-		v3_current_velocity.x = v3_movement_direction.x * f_current_speed
-		v3_current_velocity.z = v3_movement_direction.z * f_current_speed
+## Handles horizontal character movement.
+func handle_horizontal_movement(p_velocity: Vector3, p_direction: Vector3, p_speed: float) -> Vector3:
+	if p_direction:
+		p_velocity.x = p_direction.x * p_speed
+		p_velocity.z = p_direction.z * p_speed
 	else:
-		v3_current_velocity.x = move_toward(v3_current_velocity.x, 0, f_current_speed)
-		v3_current_velocity.z = move_toward(v3_current_velocity.z, 0, f_current_speed)
+		p_velocity.x = move_toward(p_velocity.x, 0, p_speed)
+		p_velocity.z = move_toward(p_velocity.z, 0, p_speed)
+	return p_velocity
 
+#==================================================================================================
+# Visual & Camera Functions
+#==================================================================================================
+
+## Handles the visual feedback for crouching (camera height, collision shape).
+func handle_crouch_visuals(delta: float):
+	var target_head_y: float = f_crouch_depth if b_is_crouching else 0.0
+	var target_collision_height: float = f_crouching_height if b_is_crouching else f_standing_height
+	
+	node_head.position.y = lerp(node_head.position.y, target_head_y, delta * f_crouch_transition_speed)
+	if node_collision_shape and node_collision_shape.shape:
+		node_collision_shape.shape.height = lerp(node_collision_shape.shape.height, target_collision_height, delta * f_crouch_transition_speed)
+
+## Handles camera effects like FOV changes and strafe roll.
+func handle_camera_effects(v2_input_dir: Vector2, delta: float):
 	# Handle Smooth FOV change for sprinting
 	var target_fov = f_default_fov + f_sprint_fov_increase if b_is_sprinting else f_default_fov
 	node_camera.fov = lerp(node_camera.fov, target_fov, delta * f_fov_transition_speed)
 		
 	# Handle the camera roll.
 	var current_roll_amount = f_camera_roll_amount if not b_is_crouching else f_camera_roll_amount * f_crouch_roll_multiplier
-	var f_target_roll: float = -v2_input_dir.x * deg_to_rad(current_roll_amount)
-	node_camera.rotation.z = lerp(node_camera.rotation.z, f_target_roll, delta * f_camera_roll_speed)
-
-	# Smoothly interpolate head position and collision height for crouching
-	var f_target_head_y: float = f_crouch_depth if b_is_crouching else 0.0
-	var f_target_collision_height: float = f_crouching_height if b_is_crouching else f_standing_height
-	node_head.position.y = lerp(node_head.position.y, f_target_head_y, delta * f_crouch_transition_speed)
-	if node_collision_shape and node_collision_shape.shape:
-		node_collision_shape.shape.height = lerp(node_collision_shape.shape.height, f_target_collision_height, delta * f_crouch_transition_speed)
-	
-	#==================================================================================================
-	# 03. Final steps
-	#==================================================================================================
-	# This section applies the calculated velocity and calls the move_and_slide function.
-	#==================================================================================================
-	# Apply the calculated velocity
-	velocity = v3_current_velocity
-	# Call the move_and_slide function to move the character
-	move_and_slide()
+	var target_roll: float = -v2_input_dir.x * deg_to_rad(current_roll_amount)
+	node_camera.rotation.z = lerp(node_camera.rotation.z, target_roll, delta * f_camera_roll_speed)
