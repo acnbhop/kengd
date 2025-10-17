@@ -91,6 +91,12 @@ func _ready() -> void:
 	f_default_fov = node_camera.fov
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * f_mouse_sensitivity)
 		node_head.rotate_x(-event.relative.y * f_mouse_sensitivity)
